@@ -1,18 +1,19 @@
-import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
+import ShortcutList from "./components/ShortcutList";
 
 function App() {
-  // wait for enter key to be pressed then close the window
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      getCurrentWebviewWindow().close();
-    }
-  });
-
   return (
-    <div className="bg-slate-600/90 backdrop-blur-lg h-screen w-screen p-2 flex items-center justify-center">
-      <p className="text-white bg-slate-700 p-2 rounded-xl">
-        KEYBOARD SHORTCUTS GOES HERE :)
-      </p>
+    <div className="bg-base-300 backdrop-blur-lg h-screen w-screen p-2 flex flex-col justify-start items-center">
+      <div className="flex flex-row justify-center items-center space-x-4">
+        <input type="text" placeholder="Type here" className="input w-full" />
+        <select className="select w-full max-w-xs">
+          <option value="vim">Vim</option>
+          <option value="vscode">VSCode</option>
+          <option value="webstorm">Python</option>
+          <option value="sublime">Rust</option>
+        </select>
+      </div>
+
+      <ShortcutList />
     </div>
   );
 }
