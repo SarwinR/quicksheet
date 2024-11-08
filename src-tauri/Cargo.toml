@@ -22,6 +22,8 @@ tauri = { version = "2", features = [ "macos-private-api", "tray-icon"] }
 tauri-plugin-shell = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+yaml-rust2 = "0.9"
+tauri-plugin-dialog = "2"
 
 [target."cfg(not(any(target_os = \"android\", target_os = \"ios\")))".dependencies]
 tauri-plugin-global-shortcut = "2"
