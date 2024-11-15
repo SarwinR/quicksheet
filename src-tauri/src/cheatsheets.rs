@@ -2,6 +2,7 @@ use std::{fs, path::PathBuf};
 use tauri::{App, Manager};
 use yaml_rust2::{Yaml, YamlLoader};
 
+#[derive(serde::Serialize)]
 pub struct CheatSheet {
     name: String,
     path: String,
@@ -9,24 +10,28 @@ pub struct CheatSheet {
     shortcuts: Vec<Category>,
 }
 
+#[derive(serde::Serialize)]
 pub struct Category {
     name: String,
     shortcuts: Vec<Shortcut>,
 }
 
+#[derive(serde::Serialize)]
 pub struct Shortcut {
     keys: String,
     description: String,
 }
 
-pub fn load_cheatsheets(app: &App) -> Result<Vec<CheatSheet>, Box<dyn std::error::Error>> {
+pub fn load_cheatsheets(app: &App) -> Result<String, Box<dyn std::error::Error>> {
     let cheatsheets_path = app.path().home_dir()?.join(".quicksheet\\cheatsheets");
 
     check_and_create_cheatsheet_folder(&cheatsheets_path)?;
 
     let cheatsheets = read_cheatsheet_files(&cheatsheets_path)?;
 
-    Ok(cheatsheets)
+    let cheatsheets_json_string = serde_json::to_string(&cheatsheets)?;
+
+    Ok(cheatsheets_json_string)
 }
 
 fn check_and_create_cheatsheet_folder(

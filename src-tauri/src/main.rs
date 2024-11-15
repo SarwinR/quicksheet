@@ -1,11 +1,32 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use std::sync::Arc;
+use tauri::Manager;
+
 mod cheatsheets;
 mod configuration;
 mod global_shortcut;
 mod system_tray_menu;
 mod webview;
+
+
+// #[tauri::command]
+// fn fetch_cheatsheets(cheatsheets: tauri::State<'_, String>) -> String {
+//     //cheatsheets.to_string()
+// }
+
+// #[tauri::command]
+// fn fetch_cheatsheets() -> String {
+//     //cheatsheets.to_string()
+//     "Test cheatsheets".to_string()
+// }
+
+#[tauri::command]
+fn fetch_cheatsheets(cheatsheets: tauri::State<'_, Arc<String>>) -> String {
+    cheatsheets.to_string()
+}
+
 
 fn main() {
     tauri::Builder::default()
@@ -15,9 +36,9 @@ fn main() {
 
             let general_config = configuration::load_and_setup_configuration(app)?;
 
-            let cheatsheets = cheatsheets::load_cheatsheets(app)?;
-
-            // todo: pass the cheatsheets to the frontend
+            let cheatsheets_content = cheatsheets::load_cheatsheets(app)?;
+            let cheatsheets = Arc::new(cheatsheets_content);
+            app.manage(cheatsheets);
 
             system_tray_menu::initialize_system_tray_menu(app)?;
 
@@ -28,6 +49,7 @@ fn main() {
 
             Ok(())
         })
+        .invoke_handler(tauri::generate_handler![fetch_cheatsheets])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

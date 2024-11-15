@@ -1,22 +1,4 @@
-const ShortcutList = () => {
-  const vimCheatSheet = [
-    { command: ":w", description: "Save file" },
-    { command: ":q", description: "Quit" },
-    { command: ":wq", description: "Save and quit" },
-    { command: ":q!", description: "Quit without saving" },
-    { command: "i", description: "Insert mode" },
-    { command: "esc", description: "Exit insert mode" },
-    { command: "dd", description: "Delete line" },
-    { command: "yy", description: "Copy line" },
-    { command: "p", description: "Paste" },
-    { command: "/text", description: "Search for 'text'" },
-    { command: "n", description: "Repeat last search" },
-    {
-      command: ":%s/old/new/g",
-      description: "Replace 'old' with 'new' globally",
-    },
-  ];
-
+const ShortcutList = ({ cheatsheets }: { cheatsheets: Array<any> }) => {
   return (
     <div className="overflow-x-auto w-full p-2">
       <table className="table">
@@ -27,14 +9,19 @@ const ShortcutList = () => {
           </tr>
         </thead>
         <tbody>
-          {vimCheatSheet.map((shortcut) => (
-            <tr>
-              <td>
-                <kbd className="kbd kbd-sm">{shortcut.command}</kbd>
-              </td>
-              <td>{shortcut.description}</td>
-            </tr>
-          ))}
+          {
+          cheatsheets.length > 0 ? 
+          cheatsheets[0]["shortcuts"].map((category: any) =>
+            category.shortcuts.map((shortcut: any) => (
+              <tr key={shortcut.keys}>
+                <td>
+                  <kbd className="kbd kbd-sm">{shortcut.keys}</kbd>
+                </td>
+                <td>{shortcut.description}</td>
+              </tr>
+            ))
+          ): <tr><td colSpan={2}>No shortcuts found</td></tr>
+        }
         </tbody>
       </table>
     </div>
