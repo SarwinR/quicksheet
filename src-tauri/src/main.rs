@@ -10,23 +10,10 @@ mod global_shortcut;
 mod system_tray_menu;
 mod webview;
 
-
-// #[tauri::command]
-// fn fetch_cheatsheets(cheatsheets: tauri::State<'_, String>) -> String {
-//     //cheatsheets.to_string()
-// }
-
-// #[tauri::command]
-// fn fetch_cheatsheets() -> String {
-//     //cheatsheets.to_string()
-//     "Test cheatsheets".to_string()
-// }
-
 #[tauri::command]
 fn fetch_cheatsheets(cheatsheets: tauri::State<'_, Arc<String>>) -> String {
     cheatsheets.to_string()
 }
-
 
 fn main() {
     tauri::Builder::default()
