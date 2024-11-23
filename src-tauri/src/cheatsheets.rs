@@ -23,7 +23,7 @@ pub struct Shortcut {
 }
 
 pub fn load_cheatsheets(app: &App) -> Result<String, Box<dyn std::error::Error>> {
-    let cheatsheets_path = app.path().home_dir()?.join(".quicksheet\\cheatsheets");
+    let cheatsheets_path = app.path().home_dir()?.join(".quicksheet/cheatsheets");
 
     check_and_create_cheatsheet_folder(&cheatsheets_path)?;
 

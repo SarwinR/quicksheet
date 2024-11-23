@@ -4,7 +4,7 @@ use tauri_plugin_dialog::{DialogExt, MessageDialogKind};
 use yaml_rust2::{Yaml, YamlLoader};
 
 pub fn load_and_setup_configuration(app: &App) -> Result<Yaml, Box<dyn std::error::Error>> {
-    let config_file_path = app.path().home_dir()?.join(".quicksheet\\config.yaml");
+    let config_file_path = app.path().home_dir()?.join(".quicksheet/config.yaml");
 
     check_and_create_config_file(&config_file_path)?;
     let general_config = load_configuration(&app, &config_file_path)?;
