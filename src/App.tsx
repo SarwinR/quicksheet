@@ -1,11 +1,12 @@
 import { invoke } from "@tauri-apps/api/core";
 import ShortcutList from "./components/ShortcutList";
 import { useEffect, useState } from "react";
-import { Cheatsheet } from "./models/Cheatsheet";
+import { Cheatsheet } from "./typings/Cheatsheet";
 
 function App() {
   const [cheatsheets, setCheatsheets] = useState<Cheatsheet[]>([]);
-  const [selectedCheatsheet, setSelectedCheatsheet] = useState<Cheatsheet | null>(null);
+  const [selectedCheatsheet, setSelectedCheatsheet] =
+    useState<Cheatsheet | null>(null);
 
   useEffect(() => {
     fetchCheatsheets();
@@ -15,7 +16,7 @@ function App() {
     invoke("fetch_cheatsheets").then((res) => {
       let cheatsheets = JSON.parse(res as string);
       setCheatsheets(cheatsheets);
-      if (cheatsheets.length > 0){
+      if (cheatsheets.length > 0) {
         setSelectedCheatsheet(cheatsheets[0]);
       }
     });
@@ -28,11 +29,12 @@ function App() {
 
   return (
     <div className="bg-base-300 backdrop-blur-lg h-screen w-screen p-2 flex flex-col justify-start items-center">
-      {selectedCheatsheet && (
-        <h1 className="text-xl font-bold mb-4">{selectedCheatsheet.name}</h1>
-      )}
       <div className="flex flex-row justify-center items-center space-x-4 mb-4">
-        <input type="text" placeholder="Search shortcuts..." className="input w-full" />
+        <input
+          type="text"
+          placeholder="Search shortcuts..."
+          className="input w-full"
+        />
         <select
           onChange={(e) => handleCheatsheetSelect(e.target.value)}
           className="select w-full max-w-xs"

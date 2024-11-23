@@ -1,27 +1,24 @@
-import { Cheatsheet } from "../models/Cheatsheet";
+import { Cheatsheet } from "../typings/Cheatsheet";
 
 const ShortcutList = ({ cheatsheet }: { cheatsheet: Cheatsheet }) => {
   return (
     <div className="overflow-x-auto w-full p-2">
       <table className="table">
-        <thead>
-          <tr>
-            <th>Command</th>
-            <th>Description</th>
-          </tr>
-        </thead>
         <tbody>
           {cheatsheet.shortcuts.length > 0 ? (
-            cheatsheet.shortcuts.map((category) =>
-              category.shortcuts.map((shortcut) => (
-                <tr key={shortcut.keys}>
-                  <td>
-                    <kbd className="kbd kbd-sm">{shortcut.keys}</kbd>
-                  </td>
-                  <td>{shortcut.description}</td>
-                </tr>
-              ))
-            )
+            cheatsheet.shortcuts.map((category) => (
+              <>
+                <h1 className="font-bold">{category.name}</h1>
+                {category.shortcuts.map((shortcut) => (
+                  <tr key={shortcut.keys}>
+                    <td>
+                      <kbd className="kbd kbd-sm">{shortcut.keys}</kbd>
+                    </td>
+                    <td>{shortcut.description}</td>
+                  </tr>
+                ))}
+              </>
+            ))
           ) : (
             <tr>
               <td colSpan={2} className="text-center">

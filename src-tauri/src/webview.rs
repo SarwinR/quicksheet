@@ -2,7 +2,7 @@ use tauri::{AppHandle, WebviewUrl, WebviewWindowBuilder};
 
 pub fn initialize_webview(handle: &AppHandle) -> tauri::Result<()> {
     WebviewWindowBuilder::new(handle, "main", WebviewUrl::default())
-        .inner_size(1920.0, 1080.0)
+        // .inner_size(1920.0 - 50.0, 1080.0 - 100.0)
         .decorations(false)
         .transparent(true)
         .resizable(false)
