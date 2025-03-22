@@ -1,5 +1,11 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/components/*"],
+      "@typings/*": ["./src/typings/*"]
+    },
     "composite": true,
     "skipLibCheck": true,
     "module": "ESNext",

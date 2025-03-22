@@ -1,7 +1,15 @@
 import { invoke } from "@tauri-apps/api/core";
 import ShortcutList from "./components/ShortcutList";
 import { useEffect, useState } from "react";
-import { Cheatsheet } from "./typings/Cheatsheet";
+import { Button } from "@/components/ui/button";
+import { Cheatsheet } from "@/typings/cheatsheet";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 function App() {
   const [cheatsheets, setCheatsheets] = useState<Cheatsheet[]>([]);
@@ -28,27 +36,31 @@ function App() {
   }
 
   return (
-    <div className="bg-base-300 backdrop-blur-lg h-screen w-screen p-2 flex flex-col justify-start items-center">
+    <div className="h-screen w-screen p-2 flex flex-col justify-start items-center">
       <div className="flex flex-row justify-center items-center space-x-4 mb-4">
+        <Button>Click me</Button>
         <input
           type="text"
           placeholder="Search shortcuts..."
           className="input w-full"
         />
-        <select
-          onChange={(e) => handleCheatsheetSelect(e.target.value)}
-          className="select w-full max-w-xs"
-        >
-          {cheatsheets.length > 0 ? (
-            cheatsheets.map((cheatsheet, index) => (
-              <option key={index} value={cheatsheet.name}>
-                {cheatsheet.name}
-              </option>
-            ))
-          ) : (
-            <option>No cheatsheets found</option>
-          )}
-        </select>
+
+        <Select onValueChange={handleCheatsheetSelect}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select Cheatsheet" />
+          </SelectTrigger>
+          <SelectContent>
+            {cheatsheets.length > 0 ? (
+              cheatsheets.map((cheatsheet, index) => (
+                <SelectItem key={index} value={cheatsheet.name}>
+                  {cheatsheet.name}
+                </SelectItem>
+              ))
+            ) : (
+              <SelectItem value="none">No cheatsheets found</SelectItem>
+            )}
+          </SelectContent>
+        </Select>
       </div>
 
       {selectedCheatsheet && <ShortcutList cheatsheet={selectedCheatsheet} />}
