@@ -4,7 +4,12 @@ export interface Shortcut {
   description: string;
 }
 
-export interface Cheatsheet {
+export interface Category {
   name: string;
   shortcuts: Shortcut[];
+}
+
+export interface Cheatsheet {
+  name: string;
+  categories: Category[];
 }
