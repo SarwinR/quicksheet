@@ -48,7 +48,7 @@ function App() {
 
   function handleCheatsheetSelect(name: string) {
     const selected = cheatsheets.find((cheatsheet) => cheatsheet.name === name);
-    setSelectedCheatsheet(selected || null);
+    setSelectedCheatsheet(selected ?? null);
   }
 
   useEffect(() => {
