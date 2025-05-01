@@ -7,7 +7,7 @@ pub struct CheatSheet {
     name: String,
     path: String,
     description: String,
-    shortcuts: Vec<Category>,
+    shortcut_categories: Vec<Category>,
 }
 
 #[derive(serde::Serialize)]
@@ -39,10 +39,52 @@ fn check_and_create_cheatsheet_folder(
 ) -> Result<(), Box<dyn std::error::Error>> {
     if !cheatsheets_path.exists() {
         fs::create_dir_all(cheatsheets_path)?;
-    }
 
-    //todo: move the default cheatsheets to the cheatsheets folder
-    
+        // Create a default cheatsheet file
+        let default_cheatsheet = r#"
+    info:
+      - name: "Vim"
+        description: "Vim shortcuts"
+    shortcuts:
+      Normal:
+        - keys: "h"
+          description: "Move cursor left"
+        - keys: "j"
+          description: "Move cursor down"
+        - keys: "k"
+          description: "Move cursor up"
+        - keys: "l"
+          description: "Move cursor right"
+      Insert:
+        - keys: "i"
+          description: "Enter insert mode"
+        - keys: "a"
+          description: "Enter insert mode after cursor"
+        - keys: "o"
+          description: "Enter insert mode below cursor"
+        - keys: "O"
+          description: "Enter insert mode above cursor"
+      Visual:
+        - keys: "v"
+          description: "Enter visual mode"
+        - keys: "V"
+          description: "Enter visual line mode"
+        - keys: "Ctrl-v"
+          description: "Enter visual block mode"
+      Command:
+        - keys: ":"
+          description: "Enter command mode"
+        - keys: "/"
+          description: "Enter search mode"
+        - keys: "Esc"
+          description: "Exit command mode"
+        - keys: "Ctrl-c"
+          description: "Exit command mode"
+        "#;
+
+        let default_cheatsheet_path = cheatsheets_path.join("default_vim_cheatsheet.yaml");
+        fs::write(&default_cheatsheet_path, default_cheatsheet)?;
+    }  
 
     Ok(())
 }
@@ -97,51 +139,10 @@ fn read_cheatsheet_files(cheatsheets_path: &PathBuf) -> Result<Vec<CheatSheet>, 
                 name: name.to_string(),
                 path: path.to_str().unwrap().to_string(),
                 description: description.to_string(),
-                shortcuts: categories,
+                shortcut_categories: categories,
             });
         }
     }
 
     Ok(cheatsheets)
 }
-
-
-// give example of a valid cheatsheet yaml file
-// info:
-//   - name: "Vim"
-//     description: "Vim shortcuts"
-// shortcuts:
-//   Normal:
-//     - keys: "h"
-//       description: "Move cursor left"
-//     - keys: "j"
-//       description: "Move cursor down"
-//     - keys: "k"
-//       description: "Move cursor up"
-//     - keys: "l"
-//       description: "Move cursor right"
-//   Insert:
-//     - keys: "i"
-//       description: "Enter insert mode"
-//     - keys: "a"
-//       description: "Enter insert mode after cursor"
-//     - keys: "o"
-//       description: "Enter insert mode below cursor"
-//     - keys: "O"
-//       description: "Enter insert mode above cursor"
-//   Visual:
-//     - keys: "v"
-//       description: "Enter visual mode"
-//     - keys: "V"
-//       description: "Enter visual line mode"
-//     - keys: "Ctrl-v"
-//       description: "Enter visual block mode"
-//   Command:
-//     - keys: ":"
-//       description: "Enter command mode"
-//     - keys: "/"
-//       description: "Enter search mode"
-//     - keys: "Esc"
-//       description: "Exit command mode"
-//     - keys: "Ctrl-c"
-//       description: "Exit command mode"
