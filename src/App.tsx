@@ -1,7 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import ShortcutList from "./components/ShortcutList";
 import { useEffect, useState } from "react";
-import { Cheatsheet, Shortcut } from "@/typings/cheatsheet";
+import { Cheatsheet, Shortcut, YAMLCheatsheet } from "@/typings/cheatsheet";
 import {
   Select,
   SelectContent,
@@ -14,6 +14,7 @@ import { Input } from "./components/ui/input";
 
 import * as JsSearch from "js-search";
 import { Badge } from "./components/ui/badge";
+import { mapYAMLCheatsheetToCheatsheetArray } from "./utils/yamlcheatsheet_to_cheatsheet";
 
 function App() {
   const [cheatsheets, setCheatsheets] = useState<Cheatsheet[]>([]);
@@ -24,17 +25,20 @@ function App() {
   const [searchResults, setSearchResults] = useState<Shortcut[]>([]);
 
   useEffect(() => {
-    fetchCheatsheets(true);
+    fetchCheatsheets();
   }, []);
 
   function fetchCheatsheets(useMock = false) {
     if (useMock) {
       setCheatsheets(mockCheatsheets);
       if (mockCheatsheets.length > 0) setSelectedCheatsheet(mockCheatsheets[0]);
+
+      return;
     }
 
     invoke("fetch_cheatsheets").then((res) => {
-      let cheatsheets = JSON.parse(res as string);
+      let yamlCheatsheets = JSON.parse(res as string) as YAMLCheatsheet[];
+      let cheatsheets = mapYAMLCheatsheetToCheatsheetArray(yamlCheatsheets);
       setCheatsheets(cheatsheets);
       if (cheatsheets.length > 0) {
         setSelectedCheatsheet(cheatsheets[0]);
@@ -52,7 +56,7 @@ function App() {
     search.addIndex("name");
     search.addIndex("description");
     search.addIndex("keys");
-    search.addDocuments(cheatsheets.flatMap((cheatsheet) => cheatsheet.categories.flatMap((category) => category.shortcuts)));
+    search.addDocuments(cheatsheets.flatMap((cheatsheet) => cheatsheet.shortcutCategories.flatMap((category) => category.shortcuts)));
 
     const results = search.search(searchQuery);
     setSearchResults(results as Shortcut[]);
@@ -90,7 +94,7 @@ function App() {
         </Select>
       </div>
 
-      {selectedCheatsheet && <ShortcutList cheatsheet={selectedCheatsheet} />}
+      {selectedCheatsheet && searchQuery.length === 0 && <ShortcutList cheatsheet={selectedCheatsheet} />}
 
       {searchResults.length > 0 && (
         <div className="overflow-x-auto w-full p-2">

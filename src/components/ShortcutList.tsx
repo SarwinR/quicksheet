@@ -6,8 +6,8 @@ const ShortcutList = ({ cheatsheet }: { cheatsheet: Cheatsheet }) => {
     <div className="overflow-x-auto w-full p-2">
       <table className="table">
         <tbody>
-          {cheatsheet.categories.length > 0 ? (
-            cheatsheet.categories.map((category) => (
+          {cheatsheet.shortcutCategories.length > 0 ? (
+            cheatsheet.shortcutCategories.map((category) => (
               <>
                 <h1 className="font-bold">{category.name}</h1>
                 {category.shortcuts.map((shortcut) => (

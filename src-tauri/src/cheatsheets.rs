@@ -7,7 +7,7 @@ pub struct CheatSheet {
     name: String,
     path: String,
     description: String,
-    shortcuts: Vec<Category>,
+    shortcut_categories: Vec<Category>,
 }
 
 #[derive(serde::Serialize)]
@@ -97,7 +97,7 @@ fn read_cheatsheet_files(cheatsheets_path: &PathBuf) -> Result<Vec<CheatSheet>, 
                 name: name.to_string(),
                 path: path.to_str().unwrap().to_string(),
                 description: description.to_string(),
-                shortcuts: categories,
+                shortcut_categories: categories,
             });
         }
     }

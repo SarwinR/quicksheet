@@ -3,7 +3,7 @@ import { Cheatsheet } from "@/typings/cheatsheet";
 export const mockCheatsheets: Cheatsheet[] = [
     {
         name: "VSCode",
-        categories: [
+        shortcutCategories: [
             {
                 name: "General",
                 shortcuts: [
@@ -26,7 +26,7 @@ export const mockCheatsheets: Cheatsheet[] = [
     },
     {
         name: "Chrome",
-        categories: [
+        shortcutCategories: [
             {
                 name: "Navigation",
                 shortcuts: [

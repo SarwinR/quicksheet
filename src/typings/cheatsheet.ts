@@ -11,5 +11,14 @@ export interface Category {
 
 export interface Cheatsheet {
   name: string;
-  categories: Category[];
+  description: string;
+  path: string;
+  shortcutCategories: Category[];
+}
+
+export interface YAMLCheatsheet {
+  name: string;
+  description: string;
+  path: string;
+  shortcut_categories: Category[];
 }
