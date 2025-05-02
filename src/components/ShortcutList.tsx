@@ -1,3 +1,4 @@
+import { generateRandomKey } from "@/utils/generateRandomKey";
 import { Cheatsheet } from "../typings/cheatsheet";
 import { Badge } from "./ui/badge";
 
@@ -11,7 +12,7 @@ const ShortcutList = ({ cheatsheet }: { cheatsheet: Cheatsheet }) => {
               <>
                 <h1 className="font-bold">{category.name}</h1>
                 {category.shortcuts.map((shortcut) => (
-                  <tr key={shortcut.name}>
+                  <tr key={generateRandomKey()}>
                     <td>
                       <Badge variant="outline" className="mr-2">
                         {shortcut.keys}

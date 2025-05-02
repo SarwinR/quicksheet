@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import ShortcutList from "./components/ShortcutList";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Cheatsheet, Shortcut, YAMLCheatsheet } from "@/typings/cheatsheet";
 import {
   Select,
@@ -12,9 +12,10 @@ import {
 import { mockCheatsheets } from "./mock/cheatsheets";
 import { Input } from "./components/ui/input";
 
+import { listen } from "@tauri-apps/api/event";
 import { Search } from "js-search";
 import { Badge } from "./components/ui/badge";
-import { mapYAMLCheatsheetToCheatsheetArray } from "./utils/yamlcheatsheet_to_cheatsheet";
+import { mapYAMLCheatsheetToCheatsheetArray } from "./utils/yamlcheatsheetToCheatsheet";
 
 function App() {
   const [cheatsheets, setCheatsheets] = useState<Cheatsheet[]>([]);
@@ -23,6 +24,14 @@ function App() {
 
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchResults, setSearchResults] = useState<Shortcut[]>([]);
+
+  const searchBarRef = useRef<HTMLInputElement>(null);
+
+  listen("webview-active", () => {
+    if (searchBarRef.current) {
+      searchBarRef.current.focus();
+    }
+  });
 
   useEffect(() => {
     fetchCheatsheets();
@@ -82,6 +91,7 @@ function App() {
     <div className="h-screen w-screen p-2 flex flex-col justify-start items-center">
       <div className="flex flex-row justify-center items-center space-x-4 mb-4">
         <Input
+          ref={searchBarRef}
           type="text"
           placeholder="Search shortcuts..."
           className="w-full"

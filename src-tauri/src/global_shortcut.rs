@@ -1,4 +1,4 @@
-use tauri::{App, AppHandle, Manager};
+use tauri::{App, AppHandle, Emitter, Manager};
 use tauri_plugin_global_shortcut::{Code, GlobalShortcutExt, Modifiers, Shortcut, ShortcutState};
 
 pub fn initialize_shortcut(app: &App, handle: AppHandle) -> tauri::Result<()> {
@@ -17,6 +17,8 @@ pub fn initialize_shortcut(app: &App, handle: AppHandle) -> tauri::Result<()> {
                                 webview.hide().unwrap();
                             } else {
                                 webview.show().unwrap();
+                                webview.set_focus().unwrap();
+                                let _ = webview.emit("webview-active", ());
                             }
                         }
                         ShortcutState::Released => {}
