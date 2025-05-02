@@ -12,7 +12,7 @@ import {
 import { mockCheatsheets } from "./mock/cheatsheets";
 import { Input } from "./components/ui/input";
 
-import * as JsSearch from "js-search";
+import { Search } from "js-search";
 import { Badge } from "./components/ui/badge";
 import { mapYAMLCheatsheetToCheatsheetArray } from "./utils/yamlcheatsheet_to_cheatsheet";
 
@@ -32,7 +32,6 @@ function App() {
     if (useMock) {
       setCheatsheets(mockCheatsheets);
       if (mockCheatsheets.length > 0) setSelectedCheatsheet(mockCheatsheets[0]);
-
       return;
     }
 
@@ -50,17 +49,34 @@ function App() {
     const selected = cheatsheets.find((cheatsheet) => cheatsheet.name === name);
     setSelectedCheatsheet(selected ?? null);
   }
+  const [searchEngine, setSearchEngine] = useState<Search | null>(null);
 
   useEffect(() => {
-    const search = new JsSearch.Search("name");
+    const search = new Search("id");
     search.addIndex("name");
     search.addIndex("description");
     search.addIndex("keys");
-    search.addDocuments(cheatsheets.flatMap((cheatsheet) => cheatsheet.shortcutCategories.flatMap((category) => category.shortcuts)));
+    const shortcuts = cheatsheets.flatMap((cheatsheet) =>
+      cheatsheet.shortcutCategories.flatMap((category) =>
+        category.shortcuts.map((shortcut, index) => ({
+          ...shortcut,
+          id: `${shortcut.keys}-${index}`,
+        }))
+      )
+    );
+    search.addDocuments(shortcuts);
+    setSearchEngine(search);
+  }, [cheatsheets]);
 
-    const results = search.search(searchQuery);
+  useEffect(() => {
+    if (!searchEngine || searchQuery.trim() === "") {
+      setSearchResults([]);
+      return;
+    }
+
+    const results = searchEngine.search(searchQuery);
     setSearchResults(results as Shortcut[]);
-  }, [searchQuery]);
+  }, [searchQuery, searchEngine]);
 
   return (
     <div className="h-screen w-screen p-2 flex flex-col justify-start items-center">
@@ -94,7 +110,9 @@ function App() {
         </Select>
       </div>
 
-      {selectedCheatsheet && searchQuery.length === 0 && <ShortcutList cheatsheet={selectedCheatsheet} />}
+      {selectedCheatsheet && searchQuery.length === 0 && (
+        <ShortcutList cheatsheet={selectedCheatsheet} />
+      )}
 
       {searchResults.length > 0 && (
         <div className="overflow-x-auto w-full p-2">
